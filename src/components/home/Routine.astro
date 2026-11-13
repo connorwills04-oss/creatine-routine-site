@@ -1,0 +1,38 @@
+---
+import Headline from '../Headline.astro';
+import Label from '../Label.astro';
+const steps = [
+  { when: 'Morning', text: 'Tear the white stick into water with breakfast.' },
+  { when: 'Day', text: 'Get on with it. Nothing to carry, nothing to remember.' },
+  { when: 'Evening', text: 'Tear the black stick into water after the laptop closes.' },
+  { when: 'Next month', text: 'Sixty sticks last thirty days. A refill arrives before you run out.' },
+];
+---
+<section class="section section--l routine">
+  <div class="wrap">
+    <Headline as="h2" size="h2" class="routine__title">Two sticks. <em>That's the whole routine.</em></Headline>
+    <ol role="list" class="routine__steps">
+      {steps.map((s) => (
+        <li class="routine__step">
+          <Label class="routine__when">{s.when}</Label>
+          <p class="routine__text">{s.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style is:global>
+  .routine__title { max-width: 16ch; }
+  .routine__steps { list-style: none; padding: 0; margin: clamp(48px, 7vw, 104px) 0 0; display: flex; flex-wrap: wrap; gap: 40px clamp(20px, 3vw, 48px); align-items: flex-start; }
+  .routine__step { border-top: 1px solid var(--ink); padding-top: 16px; flex: 1 1 240px; }
+  .routine__when { margin-bottom: 36px; }
+  .routine__text { font-family: var(--font-text); font-size: clamp(19px, 1.5vw, 24px); line-height: 1.3; font-weight: 400; color: var(--ink); }
+  @media (min-width: 1000px) {
+    .routine__steps { flex-wrap: nowrap; }
+    .routine__step:nth-child(1) { flex: 1.25 1 0; margin-top: 0; }
+    .routine__step:nth-child(2) { flex: 0.85 1 0; margin-top: 64px; }
+    .routine__step:nth-child(3) { flex: 1.1 1 0; margin-top: 24px; }
+    .routine__step:nth-child(4) { flex: 1.5 1 0; margin-top: 112px; }
+  }
+</style>

@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/home/Hero.astro';
+import Ingredients from '../components/home/Ingredients.astro';
+import Routine from '../components/home/Routine.astro';
+import KitRefill from '../components/home/KitRefill.astro';
+import LabelTesting from '../components/home/LabelTesting.astro';
+import Closing from '../components/home/Closing.astro';
+---
+<Base
+  title="Sharper days. Deeper nights."
+  description="A creatine routine in two sticks: one for the morning, one for the evening."
+  tone="paper"
+  hideNav
+>
+  <Hero />
+  <Ingredients kind="am" />
+  <Ingredients kind="pm" />
+  <Routine />
+  <KitRefill />
+  <LabelTesting />
+  <Closing />
+</Base>

@@ -1,0 +1,136 @@
+---
+import { site } from '../../config/site';
+import Nav from '../Nav.astro';
+import Headline from '../Headline.astro';
+import Button from '../Button.astro';
+import Canister from '../Canister.astro';
+
+const names = (f: { ingredients: readonly { name: string }[] }) => f.ingredients.map((i) => i.name);
+const canSize = 'clamp(8px, min(1.45vw, 2.3svh), 19px)';
+---
+<section class="hero" data-hero aria-label="Sharper days. Deeper nights.">
+  <div class="hero__night" aria-hidden="true"></div>
+  <div class="hero__line" aria-hidden="true"></div>
+
+  <div class="hero__blend">
+    <Nav tone="blend" />
+    <div class="hero__head">
+      <Headline as="h1" size="hero" class="hero__title">
+        <span class="hero__l1">Sharper days.</span>
+        <span class="hero__l2"><em>Deeper nights.</em></span>
+      </Headline>
+      <p class="hero__copy">A creatine routine in two sticks. One for the morning, one for the evening.</p>
+    </div>
+    <div class="hero__bottom">
+      <div class="hero__cap hero__cap--am">
+        <span class="hero__spacer" aria-hidden="true"></span>
+        <div class="hero__captext">
+          <p class="hero__caplabel">{site.formulas.am.label}</p>
+          <p class="hero__capformula">{names(site.formulas.am).map((n, i) => (<><span class="nb">{n}</span>{i < names(site.formulas.am).length - 1 ? ' · ' : ''}</>))}</p>
+        </div>
+      </div>
+      <div class="hero__cap hero__cap--pm">
+        <span class="hero__spacer" aria-hidden="true"></span>
+        <div class="hero__captext">
+          <p class="hero__caplabel">{site.formulas.pm.label}</p>
+          <p class="hero__capformula">{names(site.formulas.pm).map((n, i) => (<><span class="nb">{n}</span>{i < names(site.formulas.pm).length - 1 ? ' · ' : ''}</>))}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__top">
+    <Canister kind="am" open size={canSize} class="hero__can hero__can--am" />
+    <Canister kind="pm" open size={canSize} class="hero__can hero__can--pm" />
+    <div class="hero__cta"><Button href="/product/">Preorder the starter kit</Button></div>
+    <div
+      class="hero__handle"
+      data-hero-handle
+      role="slider"
+      tabindex="0"
+      aria-label="Day and night split"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="50"
+      aria-orientation="horizontal"
+    >
+      <span class="hero__thumb" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .hero {
+    --s: 0.5;
+    --edge: max(var(--gutter), calc((100% - var(--max)) / 2 + var(--gutter)));
+    --cs: clamp(8px, min(1.45vw, 2.3svh), 19px);
+    --pad: clamp(20px, 3.4svh, 36px);
+    --zone: 64px;
+    --pos: calc(22px + (100% - 44px) * var(--s));
+    position: relative; isolation: isolate; overflow: hidden;
+    display: flex; flex-direction: column;
+    min-height: max(100svh, 640px);
+    background: var(--paper); color: var(--ink);
+  }
+  html.js-motion .hero { --s: 1; } /* no flash before the wipe: starts all day */
+  .hero__night { position: absolute; z-index: 1; top: 0; bottom: 0; left: var(--pos); right: 0; background: var(--night); }
+  .hero__line { position: absolute; z-index: 2; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px; background: var(--amber); }
+
+  .hero__blend {
+    position: relative; z-index: 3; flex: 1; display: flex; flex-direction: column;
+    mix-blend-mode: difference; color: #fff;
+  }
+  .hero__head { position: relative; padding: 8px var(--edge) 0; }
+  .hero__title { position: relative; font-size: clamp(44px, min(10.4vw, 18.5svh), 156px); color: #fff; text-wrap: initial; }
+  .hero__l1, .hero__l2 { display: block; }
+  .hero__l1 { text-align: left; }
+  .hero__l2 { text-align: right; }
+  .hero__copy { margin-top: 20px; max-width: 28ch; font-size: 17px; line-height: 1.4; color: #fff; }
+  .hero__bottom {
+    margin-top: auto; padding: 24px var(--edge) calc(var(--pad) + var(--zone));
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 16px;
+  }
+  .hero__cap { display: flex; flex-direction: column-reverse; gap: 10px; }
+  .hero__cap--pm { align-items: flex-end; text-align: right; }
+  .hero__spacer { display: block; width: calc(var(--cs) * 6); height: calc(var(--cs) * 14.6); flex: none; }
+  .hero .nb { white-space: nowrap; }
+  .hero__caplabel { font-size: 15px; font-weight: 600; line-height: 1.2; color: #fff; }
+  .hero__capformula { margin-top: 4px; font-size: 14px; font-weight: 500; line-height: 1.35; color: #fff; max-width: 17ch; }
+
+  .hero__top { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+  .hero .hero__can { position: absolute; bottom: calc(var(--pad) + var(--zone)); }
+  .hero .hero__can--am { left: var(--edge); }
+  .hero .hero__can--pm { right: var(--edge); }
+  .hero__cta { position: absolute; left: 0; right: 0; bottom: var(--pad); display: flex; justify-content: center; padding-inline: var(--gutter); }
+  .hero__cta .btn { pointer-events: auto; }
+
+  .hero__handle {
+    position: absolute; top: 88px; bottom: 0; left: var(--pos); width: 44px; margin-left: -22px;
+    pointer-events: none; touch-action: pan-y; display: grid; place-items: center;
+  }
+  .hero__handle:focus-visible { outline: 2px solid var(--amber); outline-offset: -2px; }
+  .hero__thumb { display: none; width: 14px; height: 64px; background: var(--amber); border-radius: var(--r-button); }
+  @media (hover: none), (pointer: coarse) {
+    .hero__handle { pointer-events: auto; }
+    .hero__thumb { display: block; }
+  }
+
+  @media (min-width: 700px) {
+    .hero { --zone: 0px; }
+    .hero__cap { flex-direction: row; align-items: flex-end; gap: 18px; }
+    .hero__cap--pm { flex-direction: row-reverse; align-items: flex-end; }
+    .hero__copy { font-size: 18px; }
+  }
+  @media (min-width: 1100px) {
+    .hero__copy {
+      position: absolute; left: var(--edge); margin-top: 0;
+      top: calc(clamp(44px, min(10.4vw, 18.5svh), 156px) * 0.96 + 18px + 8px);
+    }
+  }
+  @media (max-width: 699px) {
+    .hero__cap--am { align-items: flex-start; }
+  }
+</style>
+<script>
+  import '../../scripts/home/hero';
+</script>

@@ -1,0 +1,10 @@
+---
+import Tbd from '../Tbd.astro';
+/** Visible placeholder after each science claim until a linked source exists. Pass `value` to override. */
+interface Props { value?: string }
+const { value = '[source needed]' } = Astro.props;
+---
+<p class="source-note">Source: <Tbd value={value} /></p>
+<style>
+  .source-note { margin-top: 0.5rem; font-size: var(--fs-small); font-weight: 500; line-height: 1.3; color: var(--ink-2); }
+</style>

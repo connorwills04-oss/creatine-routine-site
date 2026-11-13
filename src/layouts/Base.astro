@@ -1,0 +1,82 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { site } from '../config/site';
+import { u } from '../lib/url';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import PageTransition from '../components/PageTransition.astro';
+import CartDrawer from '../components/commerce/CartDrawer.astro';
+import '../styles/global.css';
+/**
+ * Base layout. Props:
+ *   title        page title; rendered as `${title} · ${brand.name}`
+ *   description  meta description
+ *   tone         'paper' (default) | 'night'  page ground; sets <body data-tone>
+ *   navTone      'paper'|'night' nav style (default = tone)
+ *   hideNav      true when the page renders <Nav tone="blend" /> itself (Home)
+ *   hideFooter   true to omit the footer
+ * Slots: default (inside <main id="main">), named "after" (after the footer: cart drawer, overlays).
+ * Mount point: <div id="cart-root"></div> for the cart implementation.
+ * Scripts here run once per document: motion boot + delegated [data-cart-open] -> cart:open.
+ */
+interface Props {
+  title: string;
+  description: string;
+  tone?: 'paper' | 'night';
+  navTone?: 'paper' | 'night';
+  hideNav?: boolean;
+  hideFooter?: boolean;
+}
+const { title, description, tone = 'paper', navTone = tone, hideNav = false, hideFooter = false } = Astro.props;
+const fullTitle = `${title} · ${site.brand.name}`;
+---
+<html lang="en" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {site.noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content={tone === 'night' ? '#0C0B0A' : '#FBFAF7'} />
+    <link rel="icon" type="image/svg+xml" href={u('/favicon.svg')} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Schibsted+Grotesk:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      // Anti-flash for headline reveals: only hide when motion is allowed.
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js-motion');
+    </script>
+    <ClientRouter />
+  </head>
+  <body data-tone={tone}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    {!hideNav && <Nav tone={navTone} />}
+    <main id="main"><slot /></main>
+    {!hideFooter && <Footer />}
+    <div id="cart-root"><CartDrawer /></div>
+    <slot name="after" />
+    <PageTransition />
+    <script>
+      import { bootMotion } from '../scripts/motion';
+      import { emitCartOpen } from '../lib/cart-events';
+      import '../scripts/commerce/boot';
+
+      const w = window as unknown as { __baseBound?: boolean };
+      if (!w.__baseBound) {
+        w.__baseBound = true;
+        bootMotion();
+        document.addEventListener('click', (e) => {
+          if ((e.target as Element | null)?.closest('[data-cart-open]')) emitCartOpen();
+        });
+      }
+    </script>
+  </body>
+</html>
+<style is:global>
+  html:has(body[data-tone="night"]) { background: var(--night); }
+</style>

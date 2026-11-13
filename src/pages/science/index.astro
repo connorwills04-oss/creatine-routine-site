@@ -1,0 +1,148 @@
+---
+import Base from '../../layouts/Base.astro';
+import Headline from '../../components/Headline.astro';
+import Button from '../../components/Button.astro';
+import Tbd from '../../components/Tbd.astro';
+import ContentRow from '../../components/content/ContentRow.astro';
+import SourceNote from '../../components/content/SourceNote.astro';
+import { site } from '../../config/site';
+const { am, pm } = site.formulas;
+---
+<Base title="Science" description="What is in each stick, and why it is there." tone="paper">
+  <!-- REVIEW: regulatory review required -->
+  <section class="section section--l sci-intro">
+    <div class="wrap sci-intro__grid">
+      <Headline as="h1" size="h1" class="sci-intro__h">What's in the sticks, <em>and why.</em></Headline>
+      <p class="prose sci-intro__p">
+        {site.brand.name} is two sticks: one for the morning, one for the evening. This page explains what is in each, why it is there, and where the research is settled and where it is not.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--s sci-rows" style="padding-top:0">
+    <div class="wrap">
+      <ContentRow title="Creatine, every day">
+        <p class="prose">Creatine is one of the most studied supplement ingredients. It supports muscle when it is taken consistently.</p>
+        <SourceNote />
+        <p class="prose">Daily use builds up stores in the body over weeks, not days. That is why this is a routine rather than something you take now and then.</p>
+        <SourceNote />
+      </ContentRow>
+
+      <ContentRow title="Creatine and the brain">
+        <p class="prose">The brain uses creatine in its energy metabolism. Research into the effects of creatine on thinking is active and still developing, so we keep our claims modest: creatine may support brain function as part of a daily routine.</p>
+        <SourceNote />
+      </ContentRow>
+
+      <ContentRow title="Caffeine and L-theanine, mornings only">
+        <p class="prose">The morning stick pairs caffeine with L-theanine, an amino acid found in tea. They are in the morning stick only, so the evening stick stays free of caffeine. Caffeine per stick: <Tbd value={am.ingredients[1].dose} />. L-theanine per stick: <Tbd value={am.ingredients[2].dose} />.</p>
+        <SourceNote />
+        <p class="prose">Not for children, or for people who are pregnant or nursing, or sensitive to caffeine. Consider the caffeine you already get from coffee, tea and other sources across the day.</p>
+      </ContentRow>
+
+      <ContentRow title="Magnesium, evenings">
+        <p class="prose">Magnesium is an essential mineral involved in muscle and nerve function. Research on magnesium and sleep is mixed. We include it in the evening stick because <Tbd>[rationale needed]</Tbd>. Magnesium per stick: <Tbd value={pm.ingredients[1].dose} />.</p>
+        <SourceNote />
+        <p class="prose">The evening stick contains no caffeine.</p>
+      </ContentRow>
+
+      <ContentRow title="Two sticks instead of one scoop">
+        <p class="prose">Splitting the day's creatine across a morning stick and an evening stick is about making the habit easy to keep. Each stick is tied to a moment that already happens, breakfast and the end of the working day, and we are not claiming the split does anything physiological.</p>
+      </ContentRow>
+      <div class="crow-end"></div>
+    </div>
+  </section>
+
+  <section class="section section--s sci-label" style="padding-top:0">
+    <div class="wrap sci-label__grid">
+      <div class="sci-label__head">
+        <Headline as="h2" size="h2">On the <em>label.</em></Headline>
+        <p class="prose" style="margin-top:1.2em">Doses are not final and will be printed here exactly as they appear on the stick.</p>
+      </div>
+      <div class="sci-label__table">
+        <table class="ltable">
+          <caption class="visually-hidden">Ingredients and amounts per stick</caption>
+          <thead>
+            <tr><th scope="col">Stick</th><th scope="col">Ingredient</th><th scope="col">Amount per stick</th></tr>
+          </thead>
+          <tbody>
+            {[am, pm].map((f) => f.ingredients.map((ing, i) => (
+              <tr>
+                {i === 0 && <th scope="rowgroup" rowspan={f.ingredients.length + 1}>{f.label}</th>}
+                <td>{ing.name}</td>
+                <td><Tbd value={ing.dose} /></td>
+              </tr>
+            )).concat([
+              <tr><td>Flavor</td><td><Tbd value={f.flavor} /></td></tr>,
+            ]))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--night section--l lot" id="lot">
+    <div class="wrap lot__grid">
+      <div class="lot__copy">
+        <Headline as="h2" size="h2">Look up <em>your lot.</em></Headline>
+        <p class="prose" style="margin-top:1.4em">
+          Each canister carries a lot number. Test reports by lot will be published here, from <Tbd value={site.unknowns.labPartner} />, covering <Tbd>[what is tested]</Tbd>.
+        </p>
+      </div>
+      <form class="lot__form" novalidate autocomplete="off" data-lot-form>
+        <label for="lot-input" class="label">Lot number</label>
+        <div class="lot__row">
+          <input id="lot-input" name="lot" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" />
+          <button class="btn btn--primary" type="submit">Look up lot</button>
+        </div>
+        <p class="lot__status" role="status" data-lot-status></p>
+      </form>
+    </div>
+  </section>
+
+  <section class="section section--m sci-close">
+    <div class="wrap sci-close__in">
+      <p class="prose">Two sticks, one routine, every label printed in full.</p>
+      <Button href="/product/">Preorder the starter kit</Button>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sci-intro__grid { display: flex; flex-wrap: wrap; align-items: flex-end; gap: clamp(24px, 4vw, 72px); }
+  .sci-intro__h { flex: 999 1 520px; }
+  .sci-intro__p { flex: 1 1 300px; padding-bottom: 0.6em; }
+  .crow-end { border-top: 1px solid var(--line-paper); }
+  .sci-label__grid { display: flex; flex-wrap: wrap; gap: clamp(24px, 4vw, 72px); }
+  .sci-label__head { flex: 4 1 280px; }
+  .sci-label__table { flex: 7 1 340px; min-width: 0; overflow-x: auto; }
+  .ltable { width: 100%; border-collapse: collapse; font-size: var(--fs-body); }
+  .ltable th, .ltable td { text-align: left; padding: 12px 16px 12px 0; border-top: 1px solid var(--line-paper); vertical-align: top; font-weight: 400; }
+  .ltable thead th { font-size: var(--fs-small); font-weight: 500; color: var(--ink-2); border-top: 0; }
+  .ltable tbody th { font-weight: 600; width: 28%; }
+  .ltable tbody tr:last-child td, .ltable tbody tr:last-child th { border-bottom: 1px solid var(--line-paper); }
+  .lot__grid { display: flex; flex-wrap: wrap; gap: clamp(32px, 5vw, 96px); align-items: flex-end; }
+  .lot__copy { flex: 999 1 420px; }
+  .lot__form { flex: 1 1 340px; }
+  .lot__row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  .lot__row input {
+    flex: 1 1 200px; min-width: 0; height: 44px; padding: 0 14px; border-radius: 2px;
+    background: transparent; color: var(--on-night); border: 1px solid #6a655d;
+  }
+  .lot__row input:focus-visible { border-color: var(--amber); }
+  .lot__status { margin-top: 14px; min-height: 1.6em; color: var(--on-night-2); font-size: var(--fs-small); font-weight: 500; }
+  .sci-close__in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; border-top: 1px solid var(--line-paper); padding-top: clamp(32px, 4vw, 56px); }
+</style>
+
+<script>
+  function bindLot() {
+    const form = document.querySelector<HTMLFormElement>('[data-lot-form]');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    const status = form.querySelector<HTMLElement>('[data-lot-status]');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (status) status.textContent = "Lot reports aren't published yet. They will appear here when the first lots ship.";
+    });
+  }
+  document.addEventListener('astro:page-load', bindLot);
+</script>

@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import Headline from '../components/Headline.astro';
+import Button from '../components/Button.astro';
+---
+<Base title="Page not found" description="This page does not exist." tone="night" hideFooter>
+  <section class="nf section section--night">
+    <div class="wrap nf__grid">
+      <div class="nf__main">
+        <p class="label">Error 404</p>
+        <Headline as="h1" size="hero">Nothing <em>here.</em></Headline>
+      </div>
+      <div class="nf__side">
+        <p class="nf__copy">The page you were looking for has moved, or never existed.</p>
+        <Button href="/">Back to the start</Button>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .nf { min-height: calc(100vh - 72px); display: flex; align-items: flex-end; padding-block: var(--pad-m); }
+  .nf__grid { display: flex; flex-wrap: wrap; gap: 48px 6vw; align-items: flex-end; justify-content: space-between; }
+  .nf__main { flex: 999 1 420px; display: grid; gap: 24px; }
+  .nf__side { flex: 1 1 280px; display: grid; gap: 24px; justify-items: start; }
+  .nf__copy { color: var(--on-night-2); max-width: 32ch; }
+</style>

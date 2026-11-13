@@ -1,0 +1,43 @@
+---
+import { u } from '../lib/url';
+/**
+ * Button / link button.
+ * Props:
+ *   href?     internal path (e.g. '/product/'; u() is applied, idempotent) or external URL -> renders <a>; otherwise <button>
+ *   variant   'primary' (amber fill, night text) | 'text' (underlined link) | 'outline'   (default 'primary')
+ *   type      'button'|'submit'|'reset' (button only, default 'button')
+ *   ...rest   any attr passes through: data-*, aria-*, disabled, class, id
+ * Open the cart with: <Button data-cart-open>Cart</Button>
+ */
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'text' | 'outline';
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+  [k: string]: unknown;
+}
+const { href, variant = 'primary', type = 'button', class: cls, ...rest } = Astro.props;
+const classes = ['btn', `btn--${variant}`, cls];
+---
+{href !== undefined ? (
+  <a class:list={classes} href={u(href)} {...rest}><slot /></a>
+) : (
+  <button class:list={classes} type={type} {...rest}><slot /></button>
+)}
+<style is:global>
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
+    min-height: var(--tap); padding: 0 24px; border-radius: var(--r-button);
+    font-family: var(--font-text); font-size: 16px; font-weight: 600; line-height: 1;
+    text-decoration: none; border: 1px solid transparent; cursor: pointer;
+    transition: background-color 120ms var(--ease-standard), color 120ms var(--ease-standard), border-color 120ms var(--ease-standard), transform 120ms var(--ease-standard);
+  }
+  .btn:active:not(:disabled) { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .btn--primary { background: var(--amber); color: var(--night); }
+  .btn--primary:hover:not(:disabled) { background: var(--amber-hover); }
+  .btn--outline { background: transparent; color: inherit; border-color: currentColor; }
+  .btn--outline:hover:not(:disabled) { background: color-mix(in srgb, currentColor 8%, transparent); }
+  .btn--text { padding: 0 2px; min-height: var(--tap); border-radius: 0; background: transparent; color: inherit; font-weight: 500; text-decoration: underline; text-underline-offset: 0.25em; text-decoration-thickness: 1px; }
+  .btn--text:hover:not(:disabled) { text-decoration-thickness: 2px; }
+</style>

@@ -1,0 +1,54 @@
+/* Design tokens. Amber is for fills and marks only, never body text on paper. Text on amber is night.
+   No gradients, glows, glass or drop shadows anywhere. */
+:root {
+  /* color */
+  --paper: #FBFAF7;
+  --white: #FFFFFF;
+  --night: #0C0B0A;
+  --amber: #C8691A;
+  --amber-hover: #DB7C2C;
+  --on-night: #FBFAF7;
+  --on-night-2: #D9D4CC;
+  --ink: #0C0B0A;
+  --ink-2: #4F4B45;      /* secondary text on paper */
+  --ink-body: #3B3833;   /* long-form body on paper */
+  --line-paper: #E4E0D8;
+  --line-night: #3A3733;
+  --line-night-2: #2A2826;
+  --photo: #EAE6DE;
+
+  /* type families */
+  --font-display: "Bodoni Moda", Didot, "Bodoni 72", Georgia, serif;
+  --font-text: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+
+  /* type scale (fluid) */
+  --fs-hero: clamp(60px, 10.4vw, 156px);
+  --fs-h1: clamp(48px, 7.4vw, 112px);
+  --fs-h2: clamp(38px, 5.2vw, 80px);
+  --fs-h3: clamp(26px, 3vw, 44px);
+  --fs-body: clamp(17px, 0.3vw + 16px, 18px);
+  --fs-small: 14px;
+  --track-display: -0.02em;
+  --lh-display: 0.96;
+
+  /* shape */
+  --r-button: 2px;
+  --r-card: 6px;
+  --r-pill: 999px;
+  --r-canister: 0;
+  --tap: 44px;
+
+  /* layout */
+  --gutter: clamp(22px, 3.2vw, 56px);
+  --max: 1440px;
+  --pad-s: clamp(64px, 7vw, 96px);
+  --pad-m: clamp(80px, 10vw, 128px);
+  --pad-l: clamp(104px, 13vw, 160px);
+  --pad-xl: clamp(120px, 15vw, 176px);
+
+  /* motion */
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-squeeze: cubic-bezier(0.34, 1.3, 0.5, 1);
+  --ease-wipe: cubic-bezier(0.83, 0, 0.17, 1);
+}

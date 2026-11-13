@@ -1,0 +1,92 @@
+---
+import { u } from '../../lib/url';
+/**
+ * Cart drawer. Mounted once from Base.astro (transition:persist). Behaviour lives in
+ * src/scripts/commerce/drawer.ts (imported by the commerce bootstrap). Line items are rendered
+ * client-side with textContent only.
+ */
+---
+<dialog class="cart-drawer" id="cart-drawer" aria-labelledby="cart-title" transition:persist="cart-drawer" data-cart-drawer>
+  <div class="cart-drawer__inner">
+    <header class="cart-drawer__head">
+      <h2 class="cart-drawer__title" id="cart-title">Your cart</h2>
+      <button type="button" class="cart-drawer__close" data-cart-close aria-label="Close cart">Close</button>
+    </header>
+    <div class="cart-drawer__body" data-cart-body data-lenis-prevent>
+      <p class="cart-drawer__note" data-cart-fallback hidden>Monthly delivery isn't set up yet, so this was added as a one-time purchase.</p>
+      <ul class="cart-lines" role="list" data-cart-lines></ul>
+      <div class="cart-empty" data-cart-empty hidden>
+        <p>Your cart is empty.</p>
+        <a class="cart-link" href={u('/product/')} data-cart-close>See the starter kit</a>
+      </div>
+    </div>
+    <div class="cart-drawer__error" role="alert" data-cart-error></div>
+    <footer class="cart-drawer__foot" data-cart-foot hidden>
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <span data-cart-subtotal></span>
+      </div>
+      <p class="cart-drawer__small">Shipping and tax are calculated at checkout.</p>
+      <p class="cart-drawer__notice" data-cart-notice hidden>Checkout isn't connected yet. Add the Shopify store domain and Storefront token to switch it on.</p>
+      <button type="button" class="btn btn--primary cart-checkout" data-cart-checkout>Check out</button>
+    </footer>
+  </div>
+</dialog>
+<style is:global>
+  .cart-drawer {
+    position: fixed; inset: 0 0 0 auto; margin: 0; padding: 0;
+    width: min(440px, 100vw); max-width: 100vw; height: 100vh; height: 100dvh; max-height: none;
+    background: var(--night); color: var(--on-night);
+    border: 0; border-left: 2px solid var(--amber); border-radius: 0;
+    overflow: hidden;
+  }
+  .cart-drawer[open] { display: block; animation: cart-in 320ms var(--ease-standard) both; }
+  .cart-drawer[open]::backdrop { background: rgba(12, 11, 10, 0.6); animation: cart-fade-in 200ms linear both; }
+  .cart-drawer[open][data-closing] { animation: cart-out 240ms var(--ease-standard) both; }
+  .cart-drawer[open][data-closing]::backdrop { animation: cart-fade-out 240ms linear both; }
+  @keyframes cart-in { from { transform: translateX(100%); } to { transform: none; } }
+  @keyframes cart-out { from { transform: none; } to { transform: translateX(100%); } }
+  @keyframes cart-fade-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes cart-fade-out { from { opacity: 1; } to { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .cart-drawer[open], .cart-drawer[open]::backdrop { animation: none; }
+  }
+  html.cart-open { overflow: hidden; }
+
+  .cart-drawer__inner { display: flex; flex-direction: column; height: 100%; font-size: 16px; line-height: 1.45; }
+  .cart-drawer__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 20px 12px 24px; border-bottom: 1px solid var(--line-night); }
+  .cart-drawer__title { font-family: var(--font-display); font-weight: 400; font-size: 32px; letter-spacing: var(--track-display); line-height: 1; }
+  .cart-drawer__close { min-height: var(--tap); min-width: var(--tap); padding: 0 8px; font-weight: 500; text-decoration: underline; text-underline-offset: 0.25em; text-decoration-thickness: 1px; }
+  .cart-drawer__close:hover { text-decoration-thickness: 2px; }
+  .cart-drawer__body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 24px; }
+  .cart-drawer__note { margin: 16px 0 0; color: var(--on-night-2); font-size: var(--fs-small); }
+
+  .cart-lines { list-style: none; margin: 0; padding: 0; }
+  .cart-line { padding: 20px 0; border-bottom: 1px solid var(--line-night); display: grid; gap: 4px; }
+  .cart-line__top { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; }
+  .cart-line__title { font-weight: 600; }
+  .cart-line__price { white-space: nowrap; font-weight: 500; }
+  .cart-line__meta { color: var(--on-night-2); font-size: var(--fs-small); }
+  .cart-line__row { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; }
+  .cart-stepper { display: inline-flex; align-items: center; border: 1px solid var(--line-night); border-radius: var(--r-button); }
+  .cart-stepper button { width: var(--tap); height: var(--tap); font-size: 20px; line-height: 1; display: grid; place-items: center; }
+  .cart-stepper button:hover:not(:disabled) { background: var(--line-night-2); }
+  .cart-stepper button:disabled { opacity: 0.4; cursor: not-allowed; }
+  .cart-stepper output { min-width: 2ch; text-align: center; font-weight: 600; }
+  .cart-remove { min-height: var(--tap); padding: 0 4px; color: var(--on-night-2); text-decoration: underline; text-underline-offset: 0.25em; text-decoration-thickness: 1px; }
+  .cart-remove:hover { color: var(--on-night); text-decoration-thickness: 2px; }
+  .cart-drawer .tbd { background: var(--line-night-2); color: var(--on-night); }
+
+  .cart-empty { padding: 32px 0; display: grid; gap: 12px; justify-items: start; }
+  .cart-link { min-height: var(--tap); display: inline-flex; align-items: center; text-underline-offset: 0.25em; }
+
+  .cart-drawer__error { padding: 0 24px; color: var(--on-night); }
+  .cart-drawer__error:not(:empty) { padding: 12px 24px; border-top: 1px solid var(--line-night); border-left: 4px solid var(--amber); font-size: var(--fs-small); }
+  .cart-drawer__foot { padding: 20px 24px 24px; border-top: 1px solid var(--line-night); display: grid; gap: 12px; }
+  .cart-subtotal { display: flex; justify-content: space-between; align-items: baseline; font-weight: 600; font-size: 18px; }
+  .cart-drawer__small { color: var(--on-night-2); font-size: var(--fs-small); }
+  .cart-drawer__notice { font-size: var(--fs-small); border: 1px solid var(--line-night); border-radius: var(--r-button); padding: 10px 12px; }
+  .cart-checkout { width: 100%; }
+  .cart-drawer :focus-visible { outline-color: var(--amber); }
+  .cart-drawer[hidden], .cart-drawer [hidden] { display: none !important; }
+</style>

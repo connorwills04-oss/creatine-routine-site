@@ -1,0 +1,16 @@
+---
+/**
+ * Display headline with the line-reveal animation (src/scripts/motion.ts picks up [data-reveal-lines]).
+ * Props:
+ *   as    'h1'|'h2'|'h3'  (default 'h2')
+ *   size  'hero'|'h1'|'h2'|'h3'  (default follows `as`) -> .display--{size}, fluid via --fs-* tokens
+ *   class extra classes
+ * Slot: headline text. Convention: wrap the SECOND HALF in <em> (italic), e.g.
+ *   <Headline as="h1" size="hero">Sharper days. <em>Deeper nights.</em></Headline>
+ * Do not put block elements inside. Body copy never animates.
+ */
+interface Props { as?: 'h1' | 'h2' | 'h3'; size?: 'hero' | 'h1' | 'h2' | 'h3'; class?: string; [k: string]: unknown }
+const { as: Tag = 'h2', size, class: cls, ...rest } = Astro.props;
+const s = size ?? Tag;
+---
+<Tag class:list={['display', `display--${s}`, cls]} data-reveal-lines {...rest}><slot /></Tag>

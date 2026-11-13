@@ -1,0 +1,53 @@
+---
+import { site } from '../../config/site';
+import Headline from '../Headline.astro';
+import Label from '../Label.astro';
+import Button from '../Button.astro';
+import Tbd from '../Tbd.astro';
+import Canister from '../Canister.astro';
+---
+<section class="section section--l kit">
+  <div class="wrap">
+    <Headline as="h2" size="h2" class="kit__title">Start with the kit. <em>Keep it going with the refill.</em></Headline>
+    <div class="kit__grid">
+      <article class="kit__card kit__card--kit">
+        <div class="kit__body">
+          <Headline as="h3" size="h3">The starter kit</Headline>
+          <p class="kit__text">Both canisters, thirty morning sticks and thirty evening sticks.</p>
+          <p class="kit__price"><span data-shopify-price="kit"><Tbd value="[price]" /></span></p>
+          <div class="kit__action"><Button href="/product/">Preorder the starter kit</Button></div>
+          <Label class="kit__ship">Preorder now. Ships <Tbd value={site.unknowns.shipDate} />.</Label>
+        </div>
+        <div class="kit__cans" aria-hidden="true">
+          <Canister kind="am" open size="clamp(11px, 1.35vw, 19px)" />
+          <Canister kind="pm" open size="clamp(11px, 1.35vw, 19px)" />
+        </div>
+      </article>
+      <article class="kit__card kit__card--refill">
+        <Headline as="h3" size="h3">The refill</Headline>
+        <p class="kit__text">Same routine. New month.</p>
+        <p class="kit__text">Sixty sticks in a slim mailer.</p>
+        <p class="kit__price"><span data-shopify-price="refill"><Tbd value="[price]" /></span></p>
+        <div class="kit__action"><Button href="/product/" variant="text">See the refill</Button></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .kit__title { max-width: 18ch; }
+  .kit__grid { margin-top: clamp(40px, 6vw, 80px); display: flex; flex-wrap: wrap; gap: clamp(16px, 2vw, 28px); align-items: flex-end; }
+  .kit__card { border-radius: var(--r-card); padding: clamp(24px, 3.4vw, 56px); }
+  .kit__card--kit { flex: 7 1 520px; background: var(--night); color: var(--on-night); display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-end; justify-content: space-between; min-height: 420px; }
+  .kit__card--kit .kit__body { flex: 1 1 260px; display: flex; flex-direction: column; align-items: flex-start; }
+  .kit__card--kit .tbd { background: var(--line-night-2); color: var(--on-night); }
+  .kit__card--kit .label { color: var(--on-night-2); }
+  .kit__card--refill { flex: 5 1 320px; background: var(--white); border: 1px solid var(--line-paper); display: flex; flex-direction: column; align-items: flex-start; }
+  .kit__text { margin-top: 16px; max-width: 34ch; }
+  .kit__card--kit .kit__text { color: var(--on-night-2); }
+  .kit__card--refill .kit__text { color: var(--ink-body); }
+  .kit__price { margin-top: 24px; font-family: var(--font-display); font-size: clamp(32px, 3vw, 44px); line-height: 1; }
+  .kit__action { margin-top: 24px; }
+  .kit__ship { margin-top: 16px; }
+  .kit__cans { display: flex; align-items: flex-end; gap: clamp(10px, 1.4vw, 20px); flex: none; }
+</style>

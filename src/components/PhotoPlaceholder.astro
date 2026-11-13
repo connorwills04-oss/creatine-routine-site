@@ -1,0 +1,18 @@
+---
+/**
+ * Labelled photo placeholder. Every photo area on the site uses this until real assets exist.
+ * Props: ratio (CSS aspect-ratio, default '4 / 5', e.g. '16 / 9' or '1'), caption (e.g. "Photo: starter kit, open"), class.
+ */
+interface Props { ratio?: string; caption: string; class?: string }
+const { ratio = '4 / 5', caption, class: cls } = Astro.props;
+---
+<figure class:list={['photo-ph', cls]} style={`aspect-ratio:${ratio}`} role="img" aria-label={caption}>
+  <figcaption>{caption}</figcaption>
+</figure>
+<style>
+  .photo-ph {
+    margin: 0; width: 100%; background: var(--photo); border-radius: var(--r-card);
+    display: grid; place-items: center; padding: 16px; text-align: center;
+    font-size: var(--fs-small); font-weight: 500; color: var(--ink-2);
+  }
+</style>

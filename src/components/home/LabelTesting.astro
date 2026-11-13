@@ -1,0 +1,29 @@
+---
+import { site } from '../../config/site';
+import Headline from '../Headline.astro';
+import Button from '../Button.astro';
+import Tbd from '../Tbd.astro';
+---
+<section class="section section--l ltest">
+  <div class="wrap ltest__grid">
+    <div class="ltest__left">
+      <Headline as="h2" size="h2">What's on the label <em>is what's in the stick.</em></Headline>
+      <p class="prose ltest__prose">Every ingredient and its amount is printed on each stick and on the canister. Nothing is hidden in a blend, so you can check the label against what you are taking.</p>
+    </div>
+    <div class="ltest__right">
+      <Headline as="h3" size="h3">Tested by <Tbd value={site.unknowns.labPartner} /></Headline>
+      <p class="prose ltest__prose">Each lot is tested before it ships. <Tbd value="[what is tested]" /></p>
+      <div class="ltest__link"><Button href="/science/" variant="text">Read the science</Button></div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .ltest__grid { display: flex; flex-wrap: wrap; gap: clamp(40px, 6vw, 96px); align-items: flex-start; }
+  .ltest__left { flex: 7 1 480px; }
+  .ltest__right { flex: 5 1 320px; border-top: 1px solid var(--ink); padding-top: 24px; margin-top: clamp(0px, 6vw, 96px); }
+  .ltest__left .ltest__prose { margin-top: 32px; }
+  .ltest__right .ltest__prose { margin-top: 16px; }
+  .ltest__link { margin-top: 20px; }
+  .ltest__right .display--h3 .tbd { font-size: 0.5em; vertical-align: 0.2em; }
+</style>

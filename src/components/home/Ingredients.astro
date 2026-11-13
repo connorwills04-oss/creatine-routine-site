@@ -1,0 +1,84 @@
+---
+import { site } from '../../config/site';
+import Headline from '../Headline.astro';
+import Label from '../Label.astro';
+import Tbd from '../Tbd.astro';
+import Canister from '../Canister.astro';
+/** Ingredient section. kind 'am' = "Sharper days" on paper; 'pm' = "Deeper nights" on night (mirrored 5+7). */
+interface Props { kind: 'am' | 'pm' }
+const { kind } = Astro.props;
+const f = site.formulas[kind];
+const notes: Record<string, string> = {
+  Creatine: kind === 'am'
+    ? 'The same creatine in every stick, morning and evening. Creatine supports muscle and is being studied for its role in brain energy.'
+    : "The second half of the day's creatine, after the laptop closes.",
+  Caffeine: 'For the first meeting, not the fourth coffee. The amount is printed on every stick.',
+  'L-theanine': 'An amino acid found in tea, often paired with caffeine.',
+  Magnesium: 'A mineral most adults get too little of from food. No caffeine in this stick.',
+};
+const isAm = kind === 'am';
+---
+<section class:list={['section', 'section--l', 'ing', `ing--${kind}`, !isAm && 'section--night']} data-ing={kind}>
+  <div class="wrap ing__grid">
+    <div class="ing__main">
+      <Label class="ing__eyebrow">{f.label}</Label>
+      {isAm
+        ? <Headline as="h2" size="h1">Sharper <em>days.</em></Headline>
+        : <Headline as="h2" size="h1">Deeper <em>nights.</em></Headline>}
+      <ul role="list" class="ing__rows">
+        {f.ingredients.map((i) => (
+          <li class="ing__row">
+            <h3 class="ing__name">{i.name}</h3>
+            <div class="ing__note">
+              <p>{notes[i.name]}</p>
+              <Label class="ing__dose">Amount per stick: <Tbd value={i.dose} /></Label>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="ing__stage" aria-hidden="true">
+      <span class="ing__giant">{isAm ? 'AM' : <em>PM</em>}</span>
+      <Canister kind={kind} open size="clamp(12px, 1.7vw, 24px)" class="ing__can" />
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .ing__grid { display: flex; flex-wrap: wrap; gap: clamp(40px, 6vw, 96px); align-items: flex-start; }
+  .ing__main { flex: 7 1 560px; min-width: 0; }
+  .ing__stage {
+    flex: 5 1 320px; min-width: 0; align-self: flex-end;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+    border-bottom: 1px solid var(--line-paper); container-type: inline-size;
+  }
+  .ing--pm .ing__stage { border-bottom-color: var(--line-night); }
+  .ing__eyebrow { margin-bottom: 20px; }
+  .ing__giant {
+    font-family: var(--font-display); font-weight: 400; font-size: clamp(120px, 50cqw, 460px);
+    line-height: 0.72; letter-spacing: -0.03em; color: var(--line-paper);
+    user-select: none; margin-bottom: -0.015em; min-width: 0;
+  }
+  .ing--pm .ing__giant { color: var(--line-night-2); }
+  .ing__giant em { font-style: italic; }
+  .ing .ing__can { margin-bottom: -1px; flex: none; }
+  .ing__rows { list-style: none; padding: 0; margin: clamp(40px, 5vw, 72px) 0 0; }
+  .ing__row {
+    display: flex; flex-wrap: wrap; gap: 8px clamp(24px, 4vw, 64px); align-items: baseline;
+    padding-block: clamp(24px, 3vw, 40px); border-top: 1px solid var(--line-paper);
+  }
+  .ing__row:last-child { border-bottom: 1px solid var(--line-paper); }
+  .ing--pm .ing__row { border-color: var(--line-night); }
+  .ing__name {
+    flex: 1 1 11ch; font-family: var(--font-display); font-weight: 400; letter-spacing: var(--track-display);
+    font-size: clamp(40px, 5.6vw, 88px); line-height: 1;
+  }
+  .ing__note { flex: 1 1 260px; max-width: 40ch; }
+  .ing__note p { color: var(--ink-body); }
+  .ing--pm .ing__note p { color: var(--on-night-2); }
+  .ing__dose { margin-top: 12px; }
+  @media (min-width: 960px) {
+    .ing--pm .ing__stage { order: -1; }
+    .ing--pm .ing__stage { flex-direction: row-reverse; }
+  }
+</style>

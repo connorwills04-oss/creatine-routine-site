@@ -1,0 +1,10 @@
+---
+/**
+ * <Tbd>…</Tbd> or <Tbd value="[ship date]" />
+ * Renders an unknown (bracketed) value in <span class="tbd"> so every placeholder looks the same
+ * and can be found with `document.querySelectorAll('.tbd')`. Pass values from src/config/site.ts.
+ */
+interface Props { value?: string }
+const { value } = Astro.props;
+---
+<span class="tbd">{value ?? ''}<slot /></span>

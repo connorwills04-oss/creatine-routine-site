@@ -1,0 +1,75 @@
+---
+import Base from '../../layouts/Base.astro';
+import Headline from '../../components/Headline.astro';
+import Button from '../../components/Button.astro';
+import Tbd from '../../components/Tbd.astro';
+import PhotoPlaceholder from '../../components/PhotoPlaceholder.astro';
+import Canister from '../../components/Canister.astro';
+---
+<Base title="About" description="Why the routine is built around two moments of the day." tone="paper">
+  <!-- REVIEW: regulatory review required -->
+  <section class="section section--l">
+    <div class="wrap">
+      <Headline as="h1" size="hero" class="about-h">A routine you'll <em>actually keep.</em></Headline>
+    </div>
+  </section>
+
+  <section class="section section--s" style="padding-top:0">
+    <div class="wrap story">
+      <div class="story__photo"><PhotoPlaceholder ratio="4 / 5" caption="Photo: founder" /></div>
+      <div class="story__text">
+        <p class="prose">Creatine works when it is taken every day. Most tubs of it end up at the back of a cupboard, used for a week and then forgotten.</p>
+        <p class="prose">So the product is a pair of sticks tied to two moments that already exist: breakfast, and the laptop closing at the end of the day. There is nothing new to remember.</p>
+        <p class="prose"><Tbd>[founder story]</Tbd></p>
+        <p class="story__sig"><Tbd>[founder name]</Tbd></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--m">
+    <div class="wrap princ">
+      <div class="princ__i princ__i--a">
+        <h3 class="display display--h3">Routine first.</h3>
+        <p class="prose">The product is built around two fixed moments of the day, one in the morning and one in the evening.</p>
+      </div>
+      <div class="princ__i princ__i--b">
+        <h3 class="display display--h3">Everything on the label.</h3>
+        <p class="prose">Every ingredient and amount is printed on the stick and the canister, including the caffeine.</p>
+      </div>
+      <div class="princ__i princ__i--c">
+        <h3 class="display display--h3">Say what we know.</h3>
+        <p class="prose">Where research is settled we say so. Where it is mixed we say that too.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--night section--xl close">
+    <div class="wrap">
+      <div class="close__cans">
+        <Canister kind="am" open size="clamp(11px, 1.7vw, 22px)" />
+        <Canister kind="pm" open size="clamp(11px, 1.7vw, 22px)" />
+      </div>
+      <hr class="rule" style="margin:0" />
+      <div class="close__row">
+        <Headline as="h2" size="h1">Sharper days. <em>Deeper nights.</em></Headline>
+        <Button href="/product/">Preorder the starter kit</Button>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .story { display: flex; flex-wrap: wrap; gap: clamp(28px, 5vw, 96px); }
+  .story__photo { flex: 4 1 260px; max-width: 520px; }
+  .story__text { flex: 7 1 340px; align-self: flex-end; }
+  .story__text .prose + .prose { margin-top: 1.1em; }
+  .story__sig { margin-top: 1.6em; }
+  .princ { display: flex; flex-wrap: wrap; gap: clamp(28px, 4vw, 72px); align-items: flex-start; }
+  .princ__i { border-top: 1px solid var(--ink); padding-top: 20px; min-width: 240px; }
+  .princ__i p { margin-top: 0.9em; }
+  .princ__i--a { flex: 5 1 300px; }
+  .princ__i--b { flex: 4 1 260px; margin-top: clamp(0px, 4vw, 72px); }
+  .princ__i--c { flex: 3 1 240px; margin-top: clamp(0px, 8vw, 144px); }
+  .close__cans { display: flex; align-items: flex-end; justify-content: center; gap: clamp(20px, 4vw, 64px); padding-bottom: 0; }
+  .close__row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 32px; padding-top: clamp(32px, 4vw, 64px); }
+</style>

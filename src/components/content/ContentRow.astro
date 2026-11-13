@@ -1,0 +1,23 @@
+---
+import Headline from '../Headline.astro';
+/**
+ * Hairline-separated row: heading left (flex 4), content right (flex 7). Wraps on narrow screens.
+ * Props: title (plain text; use <Fragment slot="title"> for markup), id
+ */
+interface Props { title?: string; id?: string }
+const { title, id } = Astro.props;
+---
+<div class="crow" id={id}>
+  <div class="crow__head">
+    <Headline as="h3" size="h3">{title}<slot name="title" /></Headline>
+  </div>
+  <div class="crow__body"><slot /></div>
+</div>
+<style>
+  .crow { display: flex; flex-wrap: wrap; gap: clamp(20px, 3vw, 56px); border-top: 1px solid var(--line-paper); padding-block: clamp(32px, 4.5vw, 72px); }
+  .crow__head { flex: 4 1 280px; min-width: 0; }
+  .crow__body { flex: 7 1 340px; min-width: 0; }
+  .crow__body :global(p + p) { margin-top: 1em; }
+  .crow__body :global(.source-note) { margin-top: 0.6rem; }
+  .crow__body :global(p.prose + .source-note + p.prose) { margin-top: 1.5em; }
+</style>

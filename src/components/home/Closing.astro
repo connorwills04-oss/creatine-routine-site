@@ -1,0 +1,18 @@
+---
+import Headline from '../Headline.astro';
+import Button from '../Button.astro';
+---
+<section class="section section--amber section--xl closing">
+  <div class="wrap closing__inner">
+    <Headline as="h2" size="hero" class="closing__title">Sharper days. <em>Deeper nights.</em></Headline>
+    <div class="closing__action"><Button href="/product/" class="closing__btn">Preorder the starter kit</Button></div>
+  </div>
+</section>
+
+<style is:global>
+  .closing__title { max-width: 12ch; }
+  .closing__action { margin-top: clamp(32px, 5vw, 64px); }
+  .btn.closing__btn { background: var(--night); color: var(--paper); }
+  .btn.closing__btn:hover:not(:disabled) { background: #26231F; }
+  .closing :focus-visible { outline-color: var(--night); }
+</style>

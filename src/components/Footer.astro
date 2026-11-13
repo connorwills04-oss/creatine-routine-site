@@ -1,0 +1,59 @@
+---
+import { site } from '../config/site';
+import { u } from '../lib/url';
+import Tbd from './Tbd.astro';
+/** Site footer on night. No props. Content comes from src/config/site.ts. Carries the FDA disclaimer and caffeine disclosure. */
+const year = new Date().getFullYear();
+const caffeine = site.formulas.am.ingredients.find((i) => i.name === 'Caffeine')!.dose;
+---
+<footer class="site-footer" data-footer>
+  <div class="wrap site-footer__top">
+    <div class="site-footer__id">
+      <a class="site-footer__word display" href={u('/')}>{site.brand.name}</a>
+      <p class="site-footer__desc">{site.brand.descriptor}</p>
+    </div>
+    <nav class="site-footer__cols" aria-label="Footer">
+      <div>
+        <h2 class="site-footer__h">Shop</h2>
+        <ul role="list">
+          <li><a href={u('/product/')}>Starter kit</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="site-footer__h">Read</h2>
+        <ul role="list">
+          <li><a href={u('/science/')}>Science</a></li>
+          <li><a href={u('/about/')}>About</a></li>
+          <li><a href={u('/faq/')}>FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="site-footer__h">Help</h2>
+        <ul role="list">
+          <li><Tbd value={site.unknowns.supportEmail} /></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="wrap site-footer__legal">
+    <p>The morning stick contains caffeine, <Tbd value={caffeine} /> per stick. Not for children, or people who are pregnant or nursing, or sensitive to caffeine.</p>
+    <p>These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
+    <p class="site-footer__copy">© {year} <Tbd value={site.unknowns.legalEntity} /></p>
+  </div>
+</footer>
+<style>
+  .site-footer { background: var(--night); color: var(--on-night); padding-block: var(--pad-s) 40px; }
+  .site-footer__top { display: flex; flex-wrap: wrap; gap: 56px 8vw; justify-content: space-between; padding-bottom: var(--pad-s); }
+  .site-footer__id { flex: 999 1 320px; }
+  .site-footer__word { display: inline-block; font-size: var(--fs-h2); text-decoration: none; }
+  .site-footer__desc { margin-top: 12px; color: var(--on-night-2); font-weight: 500; font-size: var(--fs-small); }
+  .site-footer__cols { flex: 1 1 360px; display: flex; flex-wrap: wrap; gap: 40px 56px; }
+  .site-footer__h { font-family: var(--font-text); font-size: var(--fs-small); font-weight: 500; color: var(--on-night-2); margin-bottom: 8px; }
+  .site-footer ul { padding: 0; margin: 0; }
+  .site-footer li a, .site-footer li .tbd { display: inline-flex; align-items: center; min-height: var(--tap); }
+  .site-footer a { text-decoration: none; }
+  .site-footer li a:hover { text-decoration: underline; text-underline-offset: 0.25em; }
+  .site-footer__legal { border-top: 1px solid var(--line-night); padding-top: 28px; display: grid; gap: 14px; color: var(--on-night-2); font-size: var(--fs-small); line-height: 1.6; }
+  .site-footer__legal p { max-width: 78ch; }
+  .site-footer__copy { color: var(--on-night-2); }
+</style>

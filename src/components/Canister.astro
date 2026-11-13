@@ -1,0 +1,63 @@
+---
+import { site } from '../config/site';
+/**
+ * Pure DOM/CSS product stand-in. EVERYTHING is in em, so it scales as a unit with font-size.
+ * Props:
+ *   kind   'am' | 'pm'   AM = white box, PM = night box (both stay visible on paper/white/night grounds)
+ *   open   lid off: a row of upright sticks pokes out of the top (adds 2.6em above the box)
+ *   size   CSS font-size for the whole unit, e.g. '16px', 'clamp(10px,1.6vw,22px)' (default '16px').
+ *          Box is 6em x 12em (about 1:2, i.e. 3:6). Open adds 2.6em of height above.
+ *   label  if given, role="img" + aria-label; otherwise aria-hidden (decorative)
+ *   class  extra classes (position it with them; the component is display:inline-block)
+ * No shadows, no gradients, square corners.
+ */
+interface Props { kind: 'am' | 'pm'; open?: boolean; size?: string; label?: string; class?: string }
+const { kind, open = false, size = '16px', label, class: cls } = Astro.props;
+const mark = kind === 'am' ? site.formulas.am.name : site.formulas.pm.name;
+const heights = [2.2, 2.6, 2.0, 2.5, 2.3]; // em above box top, for the open state
+---
+<div
+  class:list={['canister', `canister--${kind}`, open && 'canister--open', cls]}
+  style={`font-size:${size}`}
+  {...(label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': 'true' })}
+>
+  {open && (
+    <div class="canister__sticks">
+      {heights.map((h) => <span class="canister__stick" style={`height:${h + 1.2}em`}></span>)}
+    </div>
+  )}
+  <div class="canister__box">
+    <span class="canister__word">{site.brand.name}</span>
+    <span class="canister__desc">{site.brand.descriptor}</span>
+    <span class="canister__mark"><i class="canister__sq"></i>{mark}</span>
+  </div>
+</div>
+<style>
+  .canister {
+    --c-bg: var(--white); --c-fg: var(--night); --c-line: #BDB8AD;
+    --stick-bg: var(--white); --stick-line: #BDB8AD;
+    position: relative; display: inline-block; width: 6em; height: 12em; box-sizing: content-box;
+    border-radius: var(--r-canister); line-height: 1;
+  }
+  .canister--pm { --c-bg: var(--night); --c-fg: var(--on-night); --c-line: #4B4742; --stick-bg: var(--night); --stick-line: #4B4742; }
+  .canister--open { padding-top: 2.6em; }
+  .canister__box {
+    position: relative; z-index: 1; width: 6em; height: 12em; box-sizing: border-box;
+    background: var(--c-bg); color: var(--c-fg); border: 1px solid var(--c-line); border-radius: 0;
+    padding: 0.7em 0.6em; display: flex; flex-direction: column; align-items: flex-start;
+    overflow: hidden;
+  }
+  .canister__word { font-family: var(--font-display); font-size: 0.9em; letter-spacing: -0.02em; line-height: 1; overflow-wrap: anywhere; }
+  .canister__desc { font-family: var(--font-text); font-weight: 500; font-size: 0.3em; line-height: 1.2; margin-top: 0.6em; letter-spacing: 0; }
+  .canister__mark { margin-top: auto; display: inline-flex; align-items: center; gap: 0.4em; font-family: var(--font-text); font-weight: 600; font-size: 0.7em; }
+  .canister__sq { display: block; width: 0.5em; height: 0.5em; background: var(--amber); }
+  .canister__sticks {
+    position: absolute; z-index: 0; left: 0.7em; right: 0.7em; top: 0; height: 3.8em; /* 2.6em above the box + 1.2em hidden behind it */
+    display: flex; align-items: flex-end; justify-content: space-between;
+  }
+  .canister__stick {
+    position: relative; display: block; width: 0.7em; background: var(--stick-bg);
+    border: 1px solid var(--stick-line); border-bottom: 0; border-radius: 0; align-self: flex-end;
+  }
+  .canister__stick::after { content: ''; position: absolute; left: -1px; right: -1px; top: 0.7em; height: 0.3em; background: var(--amber); }
+</style>

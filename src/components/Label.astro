@@ -1,0 +1,9 @@
+---
+/**
+ * <Label>Small label</Label>. 14px / 500 / sentence case, never uppercase.
+ * Props: as ('p'|'span'|'div'|'h4', default 'p'), class. Passes other attrs through.
+ */
+interface Props { as?: 'p' | 'span' | 'div' | 'h4'; class?: string; [k: string]: unknown }
+const { as: Tag = 'p', class: cls, ...rest } = Astro.props;
+---
+<Tag class:list={['label', cls]} {...rest}><slot /></Tag>

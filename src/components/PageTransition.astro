@@ -1,0 +1,83 @@
+---
+/**
+ * "The line" page transition. Rendered once by Base.astro, persisted across navigations.
+ * A fixed full-viewport panel with a 2px amber edge sweeps in from the right (300ms, wipe easing),
+ * the router swaps the page behind it, then it exits left (300ms). Transform only. Skipped under reduced motion.
+ * Panel colour = destination ground: night for routes in NIGHT_ROUTES (or when the incoming body has
+ * data-tone="night"), paper otherwise. To make another route wipe to night, add its path to NIGHT_ROUTES below.
+ * While the line is busy, window.__pageLine.busy is true; motion.ts waits for the 'line:revealing' event
+ * before starting headline reveals. Astro's default fade is disabled (html transition:animate="none").
+ */
+---
+<div id="page-line" class="page-line" aria-hidden="true" transition:persist data-state="idle"></div>
+<style is:global>
+  .page-line { position: fixed; inset: 0; z-index: 900; pointer-events: none; visibility: hidden; background: var(--paper); transform: translate3d(100%, 0, 0); will-change: transform; }
+  .page-line[data-tone="night"] { background: var(--night); }
+  .page-line::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: var(--amber); }
+  .page-line[data-phase="out"]::before { left: auto; right: 0; }
+  ::view-transition-group(root), ::view-transition-old(root), ::view-transition-new(root) { animation: none !important; }
+</style>
+<script>
+  const EASE = 'cubic-bezier(0.83, 0, 0.17, 1)';
+  const DUR = 300;
+  /** Destination paths (end-with match) whose transition wipes to night. */
+  const NIGHT_ROUTES = ['/product/'];
+
+  type W = Window & { __pageLine?: { busy: boolean; ready?: Promise<void> } };
+  const w = window as W;
+  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const panel = () => document.getElementById('page-line') as HTMLElement | null;
+
+  function run(el: HTMLElement, from: string, to: string): Promise<void> {
+    return new Promise((res) => {
+      const anim = el.animate(
+        [{ transform: `translate3d(${from},0,0)` }, { transform: `translate3d(${to},0,0)` }],
+        { duration: DUR, easing: EASE, fill: 'forwards' },
+      );
+      anim.onfinish = () => { el.style.transform = `translate3d(${to},0,0)`; anim.cancel(); res(); };
+      anim.oncancel = () => res();
+    });
+  }
+
+  if (!w.__pageLine) {
+    w.__pageLine = { busy: false };
+    let failsafe: number | undefined;
+
+    document.addEventListener('astro:before-preparation', (e) => {
+      const ev = e as Event & { to: URL; loader: () => Promise<void>; newDocument?: Document };
+      const el = panel();
+      if (!el || reduced()) return;
+      const night = NIGHT_ROUTES.some((r) => ev.to.pathname.endsWith(r));
+      el.dataset.tone = night ? 'night' : 'paper';
+      el.dataset.phase = 'in';
+      el.style.visibility = 'visible';
+      w.__pageLine!.busy = true;
+      window.clearTimeout(failsafe);
+      failsafe = window.setTimeout(() => finish(), 6000);
+      const original = ev.loader;
+      ev.loader = async () => {
+        const cover = run(el, '100%', '0%');
+        await Promise.all([original(), cover]);
+        // Incoming page declares night but the route list did not: correct the colour while fully covered.
+        if (ev.newDocument?.body?.dataset.tone === 'night') el.dataset.tone = 'night';
+      };
+    });
+
+    function finish() {
+      const el = panel();
+      window.clearTimeout(failsafe);
+      w.__pageLine!.busy = false;
+      if (el) { el.style.visibility = 'hidden'; el.style.transform = 'translate3d(100%,0,0)'; el.dataset.phase = 'in'; }
+      document.dispatchEvent(new Event('line:revealing'));
+    }
+
+    document.addEventListener('astro:page-load', async () => {
+      const el = panel();
+      if (!el || !w.__pageLine!.busy) return;
+      el.dataset.phase = 'out';
+      document.dispatchEvent(new Event('line:revealing'));
+      await run(el, '0%', '-100%');
+      finish();
+    });
+  }
+</script>

@@ -1,0 +1,96 @@
+---
+import { site } from '../config/site';
+import { u } from '../lib/url';
+/**
+ * Site nav. Props:
+ *   tone 'paper' | 'night' | 'blend'
+ *     paper/night: sticky, solid ground, hairline bottom border.
+ *     blend: pure white text, transparent, no border, position static. Meant to be placed inside a
+ *            `mix-blend-mode: difference` layer that the PARENT positions (Home hero).
+ * Left: wordmark (links home). Right: links + cart button. Narrow screens: links collapse into a toggled panel.
+ * Cart: `[data-cart-open]` button (opens cart via cart:open) with `[data-cart-count]` pill kept in sync by cart:change.
+ */
+interface Props { tone?: 'paper' | 'night' | 'blend' }
+const { tone = 'paper' } = Astro.props;
+const here = Astro.url.pathname.replace(/\/?$/, '/');
+const isCurrent = (href: string) => here === u(href).replace(/\/?$/, '/');
+---
+<header class={`nav nav--${tone}`} data-nav>
+  <div class="nav__inner">
+    <a class="nav__brand" href={u('/')} aria-label={`${site.brand.name}, home`} aria-current={isCurrent('/') ? 'page' : undefined}>{site.brand.name}</a>
+    <div class="nav__right">
+      <nav class="nav__links" id="nav-links" aria-label="Primary" data-nav-links>
+        {site.nav.map((l) => (
+          <a href={u(l.href)} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>
+        ))}
+      </nav>
+      <button type="button" class="nav__cart" data-cart-open aria-label="Open cart">Cart <span class="cart-count" data-cart-count hidden>0</span></button>
+      <button type="button" class="nav__toggle" data-nav-toggle aria-expanded="false" aria-controls="nav-links">Menu</button>
+    </div>
+  </div>
+</header>
+<style is:global>
+  .nav { --nav-fg: var(--ink); --nav-bg: var(--paper); --nav-line: var(--line-paper); position: sticky; top: 0; z-index: 50; background: var(--nav-bg); color: var(--nav-fg); border-bottom: 1px solid var(--nav-line); }
+  .nav--night { --nav-fg: var(--on-night); --nav-bg: var(--night); --nav-line: var(--line-night-2); }
+  .nav--blend { --nav-fg: #fff; --nav-bg: transparent; --nav-line: transparent; position: static; border-bottom: 0; }
+  .nav__inner { max-width: var(--max); margin-inline: auto; padding: 0 var(--gutter); min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; position: relative; }
+  .nav__brand { font-family: var(--font-display); font-size: 28px; letter-spacing: -0.02em; line-height: 1; text-decoration: none; display: inline-flex; align-items: center; min-height: var(--tap); }
+  .nav__right { display: flex; align-items: center; gap: clamp(12px, 2vw, 28px); }
+  .nav__links { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 32px); }
+  .nav__links a, .nav__cart, .nav__toggle { font-family: var(--font-text); font-size: 15px; font-weight: 500; text-decoration: none; min-height: var(--tap); display: inline-flex; align-items: center; gap: 8px; }
+  .nav__links a { text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 0.35em; text-decoration-thickness: 1px; transition: text-decoration-color 120ms var(--ease-standard); }
+  .nav__links a:hover { text-decoration-color: currentColor; }
+  .nav__links a[aria-current="page"] { text-decoration-color: currentColor; text-decoration-thickness: 2px; }
+  .nav__toggle { display: none; }
+  .cart-count { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px; border-radius: var(--r-pill); background: var(--amber); color: var(--night); font-size: 12px; font-weight: 600; line-height: 1; }
+  .cart-count[hidden] { display: none; }
+  .nav--blend .cart-count { background: transparent; color: inherit; border: 1px solid currentColor; } /* amber under a difference layer turns blue */
+  .nav :focus-visible { outline-offset: 2px; }
+  @media (max-width: 760px) {
+    .nav__toggle { display: inline-flex; }
+    .nav__links { display: none; position: absolute; left: 0; right: 0; top: 100%; flex-direction: column; align-items: flex-start; gap: 0; padding: 8px var(--gutter) 20px; background: var(--nav-bg); border-bottom: 1px solid var(--nav-line); }
+    .nav--blend .nav__links { background: transparent; border-bottom: 0; }
+    .nav__links a { min-height: 48px; font-size: 20px; }
+    .nav[data-open] .nav__links { display: flex; }
+  }
+</style>
+<script>
+  import { onCartChange } from '../lib/cart-events';
+
+  // Registered once for the lifetime of the document (ClientRouter keeps the JS context).
+  const w = window as unknown as { __navBound?: boolean; __cartCount?: number };
+  const paintCount = () => {
+    const n = w.__cartCount ?? 0;
+    document.querySelectorAll<HTMLElement>('[data-cart-count]').forEach((el) => {
+      el.textContent = String(n);
+      el.hidden = n <= 0;
+    });
+  };
+  if (!w.__navBound) {
+    w.__navBound = true;
+    onCartChange((n) => { w.__cartCount = n; paintCount(); });
+    document.addEventListener('astro:page-load', paintCount);
+    document.addEventListener('click', (e) => {
+      const t = (e.target as Element | null)?.closest<HTMLElement>('[data-nav-toggle]');
+      const nav = document.querySelector<HTMLElement>('[data-nav]');
+      if (!nav) return;
+      if (t) {
+        const open = !nav.hasAttribute('data-open');
+        nav.toggleAttribute('data-open', open);
+        t.setAttribute('aria-expanded', String(open));
+      } else if ((e.target as Element | null)?.closest('[data-nav-links] a')) {
+        nav.removeAttribute('data-open');
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      const nav = document.querySelector<HTMLElement>('[data-nav][data-open]');
+      if (!nav) return;
+      nav.removeAttribute('data-open');
+      const tg = nav.querySelector<HTMLElement>('[data-nav-toggle]');
+      tg?.setAttribute('aria-expanded', 'false');
+      tg?.focus();
+    });
+  }
+  paintCount();
+</script>
