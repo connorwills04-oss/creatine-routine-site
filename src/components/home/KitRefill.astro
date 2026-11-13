@@ -13,10 +13,12 @@ import Canister from '../Canister.astro';
       <article class="kit__card kit__card--kit">
         <div class="kit__body">
           <Headline as="h3" size="h3">The starter kit</Headline>
-          <p class="kit__text">Both canisters, thirty morning sticks and thirty evening sticks.</p>
+          <p class="kit__text">Both canisters. Single-serve sticks.</p>
+          <p class="kit__text">Sticks per pack: <Tbd value={site.unknowns.sticksPerPack} />.</p>
+          <p class="kit__text">Packaging colors: <Tbd value={site.unknowns.packagingColors} />.</p>
           <p class="kit__price"><span data-shopify-price="kit"><Tbd value="[price]" /></span></p>
-          <div class="kit__action"><Button href="/product/">Preorder the starter kit</Button></div>
-          <Label class="kit__ship">Preorder now. Ships <Tbd value={site.unknowns.shipDate} />.</Label>
+          <div class="kit__action"><Button href="/product/">See the starter kit</Button></div>
+          <Label class="kit__ship">Preorders aren't open yet. Ship date: <Tbd value={site.unknowns.shipDate} />.</Label>
         </div>
         <div class="kit__cans" aria-hidden="true">
           <Canister kind="am" open size="clamp(11px, 1.35vw, 19px)" />
@@ -26,7 +28,7 @@ import Canister from '../Canister.astro';
       <article class="kit__card kit__card--refill">
         <Headline as="h3" size="h3">The refill</Headline>
         <p class="kit__text">Same routine. New month.</p>
-        <p class="kit__text">Sixty sticks in a slim mailer.</p>
+        <p class="kit__text">Same sticks as the kit. Refills aren't on sale yet.</p>
         <p class="kit__price"><span data-shopify-price="refill"><Tbd value="[price]" /></span></p>
         <div class="kit__action"><Button href="/product/" variant="text">See the refill</Button></div>
       </article>

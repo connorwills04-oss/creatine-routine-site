@@ -42,7 +42,7 @@ const canSize = 'clamp(8px, min(1.45vw, 2.3svh), 19px)';
   <div class="hero__top">
     <Canister kind="am" open size={canSize} class="hero__can hero__can--am" />
     <Canister kind="pm" open size={canSize} class="hero__can hero__can--pm" />
-    <div class="hero__cta"><Button href="/product/">Preorder the starter kit</Button></div>
+    <div class="hero__cta"><Button href="/product/">Preorders aren't open yet</Button></div>
     <div
       class="hero__handle"
       data-hero-handle
@@ -93,9 +93,9 @@ const canSize = 'clamp(8px, min(1.45vw, 2.3svh), 19px)';
   .hero__cap { display: flex; flex-direction: column-reverse; gap: 10px; }
   .hero__cap--pm { align-items: flex-end; text-align: right; }
   .hero__spacer { display: block; width: calc(var(--cs) * 6); height: calc(var(--cs) * 14.6); flex: none; }
-  .hero .nb { white-space: nowrap; }
+  .hero .nb { white-space: normal; }
   .hero__caplabel { font-size: 15px; font-weight: 600; line-height: 1.2; color: #fff; }
-  .hero__capformula { margin-top: 4px; font-size: 14px; font-weight: 500; line-height: 1.35; color: #fff; max-width: 17ch; }
+  .hero__capformula { margin-top: 4px; font-size: 14px; font-weight: 500; line-height: 1.35; color: #fff; max-width: 24ch; }
 
   .hero__top { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
   .hero .hero__can { position: absolute; bottom: calc(var(--pad) + var(--zone)); }

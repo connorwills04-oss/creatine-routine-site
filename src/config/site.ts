@@ -5,7 +5,7 @@
  */
 export const site = {
   brand: {
-    name: '[brand]',
+    name: 'Bookend',
     descriptor: 'the creatine routine',
   },
   /** Pre-launch: emits <meta name="robots" content="noindex, nofollow">. Set false at launch. */
@@ -18,14 +18,15 @@ export const site = {
     { label: 'FAQ', href: '/faq/' },
   ],
   tagline: 'Sharper days. Deeper nights.',
+  fdaDisclaimer:
+    'These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.',
   formulas: {
     am: {
       name: 'AM',
       label: 'Morning stick',
       ingredients: [
-        { name: 'Creatine', dose: '[creatine dose]' },
-        { name: 'Caffeine', dose: '[caffeine dose]' },
-        { name: 'L-theanine', dose: '[L-theanine dose]' },
+        { name: 'Creatine monohydrate', dose: '3 g' },
+        { name: 'L-theanine', dose: '200 mg' },
       ],
       flavor: '[AM flavor]',
     },
@@ -33,19 +34,26 @@ export const site = {
       name: 'PM',
       label: 'Evening stick',
       ingredients: [
-        { name: 'Creatine', dose: '[creatine dose]' },
-        { name: 'Magnesium', dose: '[magnesium form and dose]' },
+        { name: 'Creatine monohydrate', dose: '3 g' },
+        { name: 'Magnesium bisglycinate', dose: '200 mg elemental magnesium' },
       ],
       flavor: '[PM flavor]',
     },
   },
+  legal: {
+    name: 'Prooformance LLC (Idaho)',
+    email: 'connor@prooformance.com',
+  },
   unknowns: {
     shipDate: '[ship date]',
-    supportEmail: '[support email]',
-    legalEntity: '[legal entity]',
     labPartner: '[lab partner]',
     shippingRegions: '[shipping regions]',
     returnPolicy: '[return policy]',
+    sticksPerPack: '[sticks per pack]',
+    packagingColors: '[packaging colors]',
+    chargeTiming: '[charge timing]',
+    skipCancel: '[skip and cancel terms]',
+    tested: '[what is tested]',
   },
   shopify: {
     storeDomain: import.meta.env.PUBLIC_SHOPIFY_STORE_DOMAIN ?? '',
@@ -54,6 +62,9 @@ export const site = {
     handles: { kit: 'starter-kit', refill: 'refill' },
   },
 } as const;
+
+/** Public sales switch. False until preorders open. The site does not take payment while this is false. */
+export const preordersOpen: boolean = false;
 
 export type Formula = (typeof site.formulas)['am' | 'pm'];
 

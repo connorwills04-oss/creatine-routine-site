@@ -22,27 +22,24 @@ const { am, pm } = site.formulas;
   <section class="section section--s sci-rows" style="padding-top:0">
     <div class="wrap">
       <ContentRow title="Creatine, every day">
-        <p class="prose">Creatine is one of the most studied supplement ingredients. It supports muscle when it is taken consistently.</p>
+        <p class="prose">Creatine monohydrate is one of the most studied supplement ingredients. It supports muscle when it is taken consistently.</p>
         <SourceNote />
         <p class="prose">Daily use builds up stores in the body over weeks, not days. That is why this is a routine rather than something you take now and then.</p>
         <SourceNote />
       </ContentRow>
 
       <ContentRow title="Creatine and the brain">
-        <p class="prose">The brain uses creatine in its energy metabolism. Research into the effects of creatine on thinking is active and still developing, so we keep our claims modest: creatine may support brain function as part of a daily routine.</p>
+        <p class="prose">The brain uses creatine in its energy metabolism. Research into creatine monohydrate and thinking is active and still developing, so the claim stays modest: it may support brain function as part of a daily routine.</p>
         <SourceNote />
       </ContentRow>
 
-      <ContentRow title="Caffeine and L-theanine, mornings only">
-        <p class="prose">The morning stick pairs caffeine with L-theanine, an amino acid found in tea. They are in the morning stick only, so the evening stick stays free of caffeine. Caffeine per stick: <Tbd value={am.ingredients[1].dose} />. L-theanine per stick: <Tbd value={am.ingredients[2].dose} />.</p>
-        <SourceNote />
-        <p class="prose">Not for children, or for people who are pregnant or nursing, or sensitive to caffeine. Consider the caffeine you already get from coffee, tea and other sources across the day.</p>
+      <ContentRow title="L-theanine, mornings">
+        <p class="prose">The morning stick contains <Tbd value={am.ingredients[1].dose} /> of L-theanine, an amino acid found in tea.</p>
       </ContentRow>
 
       <ContentRow title="Magnesium, evenings">
-        <p class="prose">Magnesium is an essential mineral involved in muscle and nerve function. Research on magnesium and sleep is mixed. We include it in the evening stick because <Tbd>[rationale needed]</Tbd>. Magnesium per stick: <Tbd value={pm.ingredients[1].dose} />.</p>
+        <p class="prose">The evening stick uses magnesium bisglycinate, <Tbd value={pm.ingredients[1].dose} />. Magnesium supports muscle and nerve function.</p>
         <SourceNote />
-        <p class="prose">The evening stick contains no caffeine.</p>
       </ContentRow>
 
       <ContentRow title="Two sticks instead of one scoop">
@@ -56,7 +53,7 @@ const { am, pm } = site.formulas;
     <div class="wrap sci-label__grid">
       <div class="sci-label__head">
         <Headline as="h2" size="h2">On the <em>label.</em></Headline>
-        <p class="prose" style="margin-top:1.2em">Doses are not final and will be printed here exactly as they appear on the stick.</p>
+        <p class="prose" style="margin-top:1.2em">Amounts per stick are below. Flavor, pack count, and packaging colors are still open.</p>
       </div>
       <div class="sci-label__table">
         <table class="ltable">
@@ -76,6 +73,9 @@ const { am, pm } = site.formulas;
             ]))}
           </tbody>
         </table>
+        <p class="prose" style="margin-top:1.2em">Sticks per pack: <Tbd value={site.unknowns.sticksPerPack} />.</p>
+        <p class="prose" style="margin-top:0.6em">Packaging colors: <Tbd value={site.unknowns.packagingColors} />.</p>
+        <p class="claim-disclaimer">{site.fdaDisclaimer}</p>
       </div>
     </div>
   </section>
@@ -85,7 +85,7 @@ const { am, pm } = site.formulas;
       <div class="lot__copy">
         <Headline as="h2" size="h2">Look up <em>your lot.</em></Headline>
         <p class="prose" style="margin-top:1.4em">
-          Each canister carries a lot number. Test reports by lot will be published here, from <Tbd value={site.unknowns.labPartner} />, covering <Tbd>[what is tested]</Tbd>.
+          Each canister carries a lot number. Test reports by lot will be published here, from <Tbd value={site.unknowns.labPartner} />, covering <Tbd value={site.unknowns.tested} />.
         </p>
       </div>
       <form class="lot__form" novalidate autocomplete="off" data-lot-form>
@@ -102,7 +102,7 @@ const { am, pm } = site.formulas;
   <section class="section section--m sci-close">
     <div class="wrap sci-close__in">
       <p class="prose">Two sticks, one routine, every label printed in full.</p>
-      <Button href="/product/">Preorder the starter kit</Button>
+      <Button href="/product/">Preorders aren't open yet</Button>
     </div>
   </section>
 </Base>

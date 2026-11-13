@@ -28,7 +28,7 @@ function fillMoney(el: Element, m: { amount: string; currencyCode: string } | nu
 
 function preorderNote(): Node {
   const f = document.createDocumentFragment();
-  f.append('Preorder · ships ');
+  f.append("Preorders aren't open. Ship date ");
   const d = site.unknowns.shipDate;
   f.append(d.startsWith('[') ? tbd(d) : d);
   return f;

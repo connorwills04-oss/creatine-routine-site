@@ -1,11 +1,12 @@
 ---
 import Headline from '../Headline.astro';
 import Label from '../Label.astro';
+import Tbd from '../Tbd.astro';
+import { site } from '../../config/site';
 const steps = [
-  { when: 'Morning', text: 'Tear the white stick into water with breakfast.' },
+  { when: 'Morning', text: 'Stir the morning stick into water with breakfast.' },
   { when: 'Day', text: 'Get on with it. Nothing to carry, nothing to remember.' },
-  { when: 'Evening', text: 'Tear the black stick into water after the laptop closes.' },
-  { when: 'Next month', text: 'Sixty sticks last thirty days. A refill arrives before you run out.' },
+  { when: 'Evening', text: 'Stir the evening stick into water later in the day.' },
 ];
 ---
 <section class="section section--l routine">
@@ -18,6 +19,10 @@ const steps = [
           <p class="routine__text">{s.text}</p>
         </li>
       ))}
+      <li class="routine__step">
+        <Label class="routine__when">Pack</Label>
+        <p class="routine__text">Single-serve sticks. Sticks per pack: <Tbd value={site.unknowns.sticksPerPack} />.</p>
+      </li>
     </ol>
   </div>
 </section>

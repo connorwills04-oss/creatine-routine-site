@@ -1,5 +1,5 @@
 /** Product page behaviour: plan, quantity, add to cart, availability. Rebinds on each astro:page-load. */
-import { site, shopifyConfigured } from '../../config/site';
+import { site, shopifyConfigured, preordersOpen } from '../../config/site';
 import { add, getState, NOT_OPEN_MESSAGE } from '../../lib/cart';
 import { emitCartOpen } from '../../lib/cart-events';
 import { getProduct, firstSellingPlan, describeSaving } from '../../lib/shopify';
@@ -16,8 +16,10 @@ function init(): void {
   const setQty = (n: number) => {
     qty = Math.max(1, Math.min(9, n));
     if (out) out.textContent = String(qty);
-    root.querySelector<HTMLButtonElement>('[data-qty-dec]')!.disabled = qty <= 1;
-    root.querySelector<HTMLButtonElement>('[data-qty-inc]')!.disabled = qty >= 9;
+    const dec = root.querySelector<HTMLButtonElement>('[data-qty-dec]')!;
+    const inc = root.querySelector<HTMLButtonElement>('[data-qty-inc]')!;
+    dec.disabled = !preordersOpen || qty <= 1;
+    inc.disabled = !preordersOpen || qty >= 9;
   };
   setQty(1);
   root.querySelector('[data-qty-dec]')?.addEventListener('click', () => setQty(qty - 1));
@@ -50,8 +52,15 @@ function init(): void {
     void run(refillBtn, { product: 'refill', plan: 'subscribe', quantity: 1 });
   });
 
-  if (!shopifyConfigured) return;
   const lock = (btn: HTMLButtonElement | null) => { if (btn) { btn.disabled = true; btn.dataset.locked = 'true'; } };
+
+  if (!preordersOpen) {
+    lock(addBtn);
+    lock(refillBtn);
+    say("Preorders aren't open yet. This site does not take payment.");
+    return;
+  }
+  if (!shopifyConfigured) return;
 
   getProduct(site.shopify.handles.kit).then((p) => {
     if (!root.isConnected) return;

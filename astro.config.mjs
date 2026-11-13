@@ -1,9 +1,29 @@
 import { defineConfig } from 'astro/config';
 
-// Hosted on GitHub Pages under a sub-path. Override with SITE_URL / BASE_PATH env vars.
+// Vercel (VERCEL=1) serves this site at the domain root.
+// GitHub Pages, including scripts/deploy.sh, keeps the project subpath unless BASE_PATH is set.
+function deployBase() {
+  if (process.env.BASE_PATH !== undefined) {
+    const raw = process.env.BASE_PATH.trim();
+    if (raw === '' || raw === '/') return '/';
+    const prefixed = raw.startsWith('/') ? raw : `/${raw}`;
+    return prefixed.replace(/\/+$/, '') || '/';
+  }
+  return process.env.VERCEL ? '/' : '/creatine-routine-site';
+}
+
+// SITE_URL wins. On Vercel, use the production vercel.app host, then the deployment host.
+function deploySite() {
+  const explicit = process.env.SITE_URL?.trim();
+  if (explicit) return explicit.replace(/\/+$/, '');
+  const host = (process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL || '').trim();
+  if (host) return `https://${host.replace(/^https?:\/\//, '').replace(/\/+$/, '')}`;
+  return 'https://connorwills04-oss.github.io';
+}
+
 export default defineConfig({
-  site: process.env.SITE_URL ?? 'https://connorwills04-oss.github.io',
-  base: process.env.BASE_PATH ?? '/creatine-routine-site',
+  site: deploySite(),
+  base: deployBase(),
   output: 'static',
   trailingSlash: 'always',
   build: { format: 'directory' },

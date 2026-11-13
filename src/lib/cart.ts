@@ -3,7 +3,7 @@
  *  CONNECTED (shopifyConfigured): real Shopify cart, id in localStorage, hosted checkout.
  *  NOT CONNECTED: local cart in localStorage, no prices, checkout disabled. Never fakes an order.
  */
-import { site, shopifyConfigured } from '../config/site';
+import { site, shopifyConfigured, preordersOpen } from '../config/site';
 import { emitCartChange } from './cart-events';
 import * as shop from './shopify';
 import type { Money, RawCart, LineInput } from './shopify';
@@ -35,8 +35,7 @@ export interface CartState {
   planFallback: boolean;
 }
 
-export const NOT_CONNECTED_NOTICE =
-  "Checkout isn't connected yet. Add the Shopify store domain and Storefront token to switch it on.";
+export const NOT_CONNECTED_NOTICE = "Checkout isn't open. This site does not take payment.";
 export const NOT_OPEN_MESSAGE = "Preorders aren't open yet.";
 
 const KEY_ID = 'cart:shopify-id';
@@ -155,6 +154,10 @@ export async function add(opts: { product: ProductKey; plan: PlanKind; quantity:
   return enqueue(async () => {
     set({ busy: true, error: null, planFallback: false });
     try {
+      if (!preordersOpen) {
+        set({ busy: false, error: NOT_OPEN_MESSAGE });
+        return false;
+      }
       if (!shopifyConfigured) {
         const lines = readLocal();
         const hit = lines.find((l) => l.productKey === opts.product && l.planKind === opts.plan);
