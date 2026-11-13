@@ -1,10 +1,8 @@
 ---
 import { site } from '../config/site';
 import { u } from '../lib/url';
-import Tbd from './Tbd.astro';
-/** Site footer on night. No props. Content comes from src/config/site.ts. Carries the FDA disclaimer and caffeine disclosure. */
+/** Site footer on night. Content comes from src/config/site.ts, including the FDA disclaimer. */
 const year = new Date().getFullYear();
-const caffeine = site.formulas.am.ingredients.find((i) => i.name === 'Caffeine')!.dose;
 ---
 <footer class="site-footer" data-footer>
   <div class="wrap site-footer__top">
@@ -30,15 +28,15 @@ const caffeine = site.formulas.am.ingredients.find((i) => i.name === 'Caffeine')
       <div>
         <h2 class="site-footer__h">Help</h2>
         <ul role="list">
-          <li><Tbd value={site.unknowns.supportEmail} /></li>
+          <li><a href={`mailto:${site.legal.email}`}>{site.legal.email}</a></li>
         </ul>
       </div>
     </nav>
   </div>
   <div class="wrap site-footer__legal">
-    <p>The morning stick contains caffeine, <Tbd value={caffeine} /> per stick. Not for children, or people who are pregnant or nursing, or sensitive to caffeine.</p>
-    <p>These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
-    <p class="site-footer__copy">© {year} <Tbd value={site.unknowns.legalEntity} /></p>
+    <p>Distributed by {site.legal.name}.</p>
+    <p>{site.fdaDisclaimer}</p>
+    <p class="site-footer__copy">© {year} {site.legal.name}</p>
   </div>
 </footer>
 <style>

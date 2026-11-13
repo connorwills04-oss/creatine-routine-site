@@ -9,12 +9,11 @@ interface Props { kind: 'am' | 'pm' }
 const { kind } = Astro.props;
 const f = site.formulas[kind];
 const notes: Record<string, string> = {
-  Creatine: kind === 'am'
-    ? 'The same creatine in every stick, morning and evening. Creatine supports muscle and is being studied for its role in brain energy.'
-    : "The second half of the day's creatine, after the laptop closes.",
-  Caffeine: 'For the first meeting, not the fourth coffee. The amount is printed on every stick.',
-  'L-theanine': 'An amino acid found in tea, often paired with caffeine.',
-  Magnesium: 'A mineral most adults get too little of from food. No caffeine in this stick.',
+  'Creatine monohydrate': kind === 'am'
+    ? 'In the morning stick and the evening stick. Creatine monohydrate supports muscle when taken every day.'
+    : 'The same creatine monohydrate, in the evening stick.',
+  'L-theanine': 'An amino acid found in tea, in the morning stick.',
+  'Magnesium bisglycinate': 'In the evening stick. Magnesium supports muscle and nerve function.',
 };
 const isAm = kind === 'am';
 ---
@@ -36,6 +35,7 @@ const isAm = kind === 'am';
           </li>
         ))}
       </ul>
+      {!isAm && <p class="claim-disclaimer">{site.fdaDisclaimer}</p>}
     </div>
     <div class="ing__stage" aria-hidden="true">
       <span class="ing__giant">{isAm ? 'AM' : <em>PM</em>}</span>
@@ -70,8 +70,8 @@ const isAm = kind === 'am';
   .ing__row:last-child { border-bottom: 1px solid var(--line-paper); }
   .ing--pm .ing__row { border-color: var(--line-night); }
   .ing__name {
-    flex: 1 1 11ch; font-family: var(--font-display); font-weight: 400; letter-spacing: var(--track-display);
-    font-size: clamp(40px, 5.6vw, 88px); line-height: 1;
+    flex: 1 1 12ch; font-family: var(--font-display); font-weight: 400; letter-spacing: var(--track-display);
+    font-size: clamp(28px, 3.8vw, 56px); line-height: 0.95; overflow-wrap: anywhere;
   }
   .ing__note { flex: 1 1 260px; max-width: 40ch; }
   .ing__note p { color: var(--ink-body); }

@@ -22,9 +22,9 @@ const un = site.unknowns;
         <h2 class="display display--h3 grp__t">The routine</h2>
         <div class="grp__items">
           <details open><summary>What is it?</summary>
-            <div class="ans prose"><p>{site.brand.name} is a creatine routine in two sticks: a white stick for the morning and a black stick for the evening. Creatine supports muscle when taken consistently, so the sticks are built around two moments that already happen each day.</p></div></details>
+            <div class="ans prose"><p>{site.brand.name} is a creatine monohydrate routine in two single-serve sticks: one for the morning and one for the evening. Creatine monohydrate supports muscle when taken every day, so the sticks sit on moments that already happen.</p></div></details>
           <details><summary>When do I take each stick?</summary>
-            <div class="ans prose"><p>Take the white stick with breakfast and the black stick in the evening. The morning stick contains caffeine, so keep it to mornings.</p></div></details>
+            <div class="ans prose"><p>Take the morning stick with breakfast and the evening stick later in the day.</p></div></details>
           <details><summary>What if I miss one?</summary>
             <!-- REVIEW: confirm missed-dose guidance -->
             <div class="ans prose"><p>Take the next one as normal. Don't double up.</p></div></details>
@@ -32,6 +32,10 @@ const un = site.unknowns;
             <div class="ans prose"><p>Tear the stick open into a glass of water and stir.</p></div></details>
           <details><summary>What do they taste like?</summary>
             <div class="ans prose"><p>Morning stick: <Tbd value={am.flavor} />. Evening stick: <Tbd value={pm.flavor} />.</p></div></details>
+          <details><summary>How many sticks are in a pack?</summary>
+            <div class="ans prose"><p>Sticks per pack: <Tbd value={un.sticksPerPack} />.</p></div></details>
+          <details><summary>What color is the packaging?</summary>
+            <div class="ans prose"><p>Packaging colors: <Tbd value={un.packagingColors} />.</p></div></details>
         </div>
       </div>
 
@@ -39,17 +43,15 @@ const un = site.unknowns;
         <h2 class="display display--h3 grp__t">What's inside</h2>
         <div class="grp__items">
           <details><summary>What's in the morning stick?</summary>
-            <div class="ans prose"><p>Creatine (<Tbd value={am.ingredients[0].dose} />), caffeine (<Tbd value={am.ingredients[1].dose} />) and L-theanine (<Tbd value={am.ingredients[2].dose} />), flavored. The full label is on the <a href={u("/science/")}>science page</a>.</p></div></details>
+            <div class="ans prose"><p>Creatine monohydrate (<Tbd value={am.ingredients[0].dose} />) and L-theanine (<Tbd value={am.ingredients[1].dose} />). Flavor: <Tbd value={am.flavor} />. The full label is on the <a href={u("/science/")}>science page</a>.</p></div></details>
           <details><summary>What's in the evening stick?</summary>
-            <div class="ans prose"><p>Creatine (<Tbd value={pm.ingredients[0].dose} />) and magnesium (<Tbd value={pm.ingredients[1].dose} />), flavored. It contains no caffeine.</p></div></details>
-          <details><summary>How much caffeine is in the morning stick?</summary>
-            <div class="ans prose"><p><Tbd value={am.ingredients[1].dose} /> per stick. Not for children, or for people who are pregnant or nursing, or sensitive to caffeine. Consider the caffeine you already get from other sources through the day.</p></div></details>
-          <details><summary>Why magnesium in the evening?</summary>
-            <div class="ans prose"><p>Magnesium is an essential mineral involved in muscle and nerve function. Research on magnesium and sleep is mixed. We include it in the evening stick because <Tbd>[rationale needed]</Tbd>.</p></div></details>
+            <div class="ans prose"><p>Creatine monohydrate (<Tbd value={pm.ingredients[0].dose} />) and magnesium bisglycinate (<Tbd value={pm.ingredients[1].dose} />). Flavor: <Tbd value={pm.flavor} />.</p></div></details>
+          <details><summary>What about the magnesium?</summary>
+            <div class="ans prose"><p>The evening stick provides magnesium bisglycinate, <Tbd value={pm.ingredients[1].dose} />. Magnesium supports muscle and nerve function.</p></div></details>
           <details><summary>Is it tested?</summary>
-            <div class="ans prose"><p>Testing is by <Tbd value={un.labPartner} />, covering <Tbd>[what is tested]</Tbd>. We plan to publish test reports by lot number on the science page.</p></div></details>
-          <details><summary>Who shouldn't take it?</summary>
-            <div class="ans prose"><p>The morning stick is not for children, or for people who are pregnant or nursing, or sensitive to caffeine. Talk to your doctor first if you have a medical condition, take medication, or are pregnant or nursing.</p></div></details>
+            <div class="ans prose"><p>Lab partner: <Tbd value={un.labPartner} />. What is tested: <Tbd value={un.tested} />. We plan to publish test reports by lot number on the science page.</p></div></details>
+          <details><summary>Who should talk to a doctor first?</summary>
+            <div class="ans prose"><p>Talk to your doctor before use if you are pregnant or nursing, have a medical condition, or take medication.</p></div></details>
         </div>
       </div>
 
@@ -57,26 +59,26 @@ const un = site.unknowns;
         <h2 class="display display--h3 grp__t">Preorders and refills</h2>
         <div class="grp__items">
           <details><summary>When will my preorder ship?</summary>
-            <div class="ans prose"><p>Estimated ship date: <Tbd value={un.shipDate} />.</p></div></details>
+            <div class="ans prose"><p>Preorders aren't open yet. Estimated ship date: <Tbd value={un.shipDate} />.</p></div></details>
           <details><summary>When am I charged?</summary>
-            <div class="ans prose"><p><Tbd>[charge timing]</Tbd></p></div></details>
+            <div class="ans prose"><p>You are not charged. Preorders aren't open. Charge timing, once they are: <Tbd value={un.chargeTiming} />.</p></div></details>
           <details><summary>How do refills work?</summary>
-            <div class="ans prose"><p>Each refill is sixty sticks, sent monthly. Skip and cancel terms: <Tbd>[skip and cancel terms]</Tbd>.</p></div></details>
+            <div class="ans prose"><p>Refills aren't on sale yet. Sticks per pack: <Tbd value={un.sticksPerPack} />. Skip and cancel terms: <Tbd value={un.skipCancel} />.</p></div></details>
           <details><summary>Where do you ship?</summary>
             <div class="ans prose"><p><Tbd value={un.shippingRegions} /></p></div></details>
           <details><summary>Returns</summary>
             <div class="ans prose"><p><Tbd value={un.returnPolicy} /></p></div></details>
           <details><summary>How do I get help?</summary>
-            <div class="ans prose"><p>Email <Tbd value={un.supportEmail} />.</p></div></details>
+            <div class="ans prose"><p>Email <a href={`mailto:${site.legal.email}`}>{site.legal.email}</a>.</p></div></details>
         </div>
       </div>
 
       <div class="more">
         <div>
           <h2 class="display display--h3">Still have a question?</h2>
-          <p class="prose" style="margin-top:0.8em">Email <Tbd value={un.supportEmail} />.</p>
+          <p class="prose" style="margin-top:0.8em">Email <a href={`mailto:${site.legal.email}`}>{site.legal.email}</a>.</p>
         </div>
-        <Button href="/product/">Preorder the starter kit</Button>
+        <Button href="/product/">Preorders aren't open yet</Button>
       </div>
     </div>
   </section>

@@ -14,7 +14,7 @@ The site is static (GitHub Pages). It talks to Shopify's Storefront API from the
 4. **Preorder settings.**
    - On each variant, turn on **Continue selling when out of stock** (or turn off inventory tracking), so the products stay purchasable before stock exists.
    - Add preorder wording to the product description.
-   - Decide when cards are charged: at order time, or later. If you want a deferred charge, use Shopify's pre-order purchase options or a preorder app. The site shows "[when the card is charged]" until you decide.
+   - Decide when cards are charged: at order time, or later. If you want a deferred charge, use Shopify's pre-order purchase options or a preorder app. The site shows "[charge timing]" until you decide. Preorders are not open, so the live site does not charge anyone.
 5. **Refills.** Install a subscriptions app (for example Shopify Subscriptions), create a monthly plan, and attach it to **both** products. The site uses the first selling plan it finds. Until a plan exists, "Kit now, refills monthly" is added as a one-time purchase and the cart says so.
 6. **Connect the site.** Put these in `.env` (never commit a private token):
    ```
@@ -26,6 +26,8 @@ The site is static (GitHub Pages). It talks to Shopify's Storefront API from the
 
 ## When it is not connected
 
-If either `.env` value is missing, the site still works as a demo: the cart is kept in the browser, prices show the `[price]` placeholder, and Check out is disabled with the note "Checkout isn't connected yet." No order is ever created.
+`preordersOpen` in `src/config/site.ts` is false. Add to cart stays disabled, and the page says preorders are not open. No order is created and nothing is charged. Prices keep the `[price]` placeholder while Shopify is disconnected. Checkout stays off until both env vars exist.
+
+If `preordersOpen` is later set to true while either `.env` value is still missing, the cart is kept in the browser only, prices still show `[price]`, and Check out stays disabled. No order is created.
 
 If it is connected but a product handle is missing or not available for sale, the product page disables Add to cart and says "Preorders aren't open yet."

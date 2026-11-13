@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Builds the site and publishes dist/ to the gh-pages branch (GitHub Pages).
+# GitHub Pages publish. Do not export VERCEL here. That flag builds the site at / for Vercel.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 REMOTE="$(git remote get-url origin)"

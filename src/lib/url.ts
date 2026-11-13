@@ -1,9 +1,9 @@
 /**
  * u(path): the ONLY way to build internal links and asset URLs.
- * Prefixes import.meta.env.BASE_URL (e.g. "/creatine-routine-site/") and normalises slashes.
- *   u('/')         -> /creatine-routine-site/
- *   u('/product/') -> /creatine-routine-site/product/
- *   u('favicon.svg') -> /creatine-routine-site/favicon.svg
+ * Prefixes import.meta.env.BASE_URL and normalises slashes.
+ * On Vercel, BASE_URL is "/". On GitHub Pages it is "/creatine-routine-site/".
+ *   u('/')         -> {base}/
+ *   u('/product/') -> {base}/product/
  * External URLs (http:, https:, mailto:, tel:, #hash, //) are returned untouched.
  */
 export function u(path: string = '/'): string {

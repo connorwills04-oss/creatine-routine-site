@@ -60,6 +60,8 @@ html.js-motion [data-reveal-lines] { visibility: hidden; }
 .section--amber { background: var(--amber); color: var(--night); }
 .muted { color: var(--ink-2); }
 .prose { color: var(--ink-body); max-width: 62ch; }
+.claim-disclaimer { margin-top: 1.6em; max-width: 78ch; font-size: var(--fs-small); line-height: 1.6; color: var(--ink-2); }
+.section--night .claim-disclaimer { color: var(--on-night-2); }
 .section--night .prose { color: var(--on-night-2); }
 .rule { border: 0; border-top: 1px solid var(--line-paper); margin: 0; }
 .section--night .rule { border-top-color: var(--line-night); }
